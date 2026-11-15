@@ -5,6 +5,13 @@ from rich.table import Table
 init(autoreset=True)
 consola = Console()
 
+COLORES_PRIORIDAD = {"alta": "red", "media": "yellow", "baja": "green"}
+
+
+def colorear_prioridad(prioridad):
+    color = COLORES_PRIORIDAD.get(prioridad, "white")
+    return f"[{color}]{prioridad}[/{color}]"
+
 
 def mensaje_ok(texto):
     print(Fore.GREEN + texto)
@@ -36,7 +43,7 @@ def mostrar_tabla(tickets):
         tabla.add_row(
             str(ticket["id"]),
             ticket["titulo"],
-            ticket["prioridad"],
+            colorear_prioridad(ticket["prioridad"]),
             ticket["estado"],
             ticket["fecha_creacion"],
         )
