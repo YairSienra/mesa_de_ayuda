@@ -2,7 +2,7 @@ from colorama import Fore, Style, init
 from rich.console import Console
 from rich.table import Table
 
-from tickets import horas_abierto
+from tickets import horas_abierto, sla_vencido
 
 init(autoreset=True)
 consola = Console()
@@ -37,6 +37,8 @@ def formatear_tiempo(ticket):
     horas = horas_abierto(ticket)
     if horas is None:
         return "?"
+    if sla_vencido(ticket):
+        return f"[bold red]{horas} h VENCIDO[/bold red]"
     return f"{horas} h"
 
 

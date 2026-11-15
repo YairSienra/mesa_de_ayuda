@@ -7,6 +7,7 @@ ESTADOS = ["abierto", "en_curso", "resuelto"]
 SIGUIENTE_ESTADO = {"abierto": "en_curso", "en_curso": "resuelto"}
 FORMATO_FECHA = "%Y-%m-%d %H:%M"
 SIN_TECNICO = "sin asignar"
+HORAS_SLA_ALTA = 8
 CATEGORIAS = ["Hardware", "Redes", "Software", "Impresoras"]
 
 
@@ -101,6 +102,17 @@ def horas_abierto(ticket, ahora=None):
     except (KeyError, ValueError):
         return None
     return int((ahora - creado).total_seconds() // 3600)
+
+
+def sla_vencido(ticket, ahora=None):
+    if ticket["prioridad"] != "alta" or ticket["estado"] == "resuelto":
+        return False
+    horas = horas_abierto(ticket, ahora)
+    return horas is not None and horas > HORAS_SLA_ALTA
+
+
+def tickets_vencidos(tickets):
+    return [ticket for ticket in tickets if sla_vencido(ticket)]
 
 
 def filtrar_tickets(tickets, campo, valor):

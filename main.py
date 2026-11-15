@@ -164,6 +164,15 @@ def opcion_buscar_palabra(lista):
     vista.mostrar_tabla(gestor.buscar_por_palabra(lista, palabra))
 
 
+def opcion_vencidos(lista):
+    vencidos = gestor.tickets_vencidos(lista)
+    if not vencidos:
+        vista.mensaje_ok("No hay tickets con SLA vencido.")
+        return
+    vista.mensaje_error(f"Hay {len(vencidos)} ticket(s) con SLA vencido.")
+    vista.mostrar_tabla(vencidos)
+
+
 def opcion_resumen(lista):
     vista.mostrar_resumen(reportes.generar_resumen(lista))
 
@@ -180,6 +189,7 @@ OPCIONES = [
     ("Ver resumen", opcion_resumen),
     ("Editar ticket", opcion_editar),
     ("Buscar por palabra", opcion_buscar_palabra),
+    ("Ver tickets con SLA vencido", opcion_vencidos),
 ]
 
 
