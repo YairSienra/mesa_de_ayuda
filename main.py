@@ -1,3 +1,5 @@
+"""Menú principal de la Mesa de Ayuda por consola."""
+
 import archivo
 import reportes
 import tickets as gestor
@@ -5,6 +7,15 @@ import vista
 
 
 def pedir_texto(mensaje, obligatorio=False):
+    """Pide un texto al usuario.
+
+    Args:
+        mensaje: Texto que se muestra al pedir el dato.
+        obligatorio: Si es True, vuelve a pedir mientras esté vacío.
+
+    Returns:
+        El texto ingresado, sin espacios al principio ni al final.
+    """
     while True:
         texto = input(mensaje).strip()
         if texto or not obligatorio:
@@ -13,6 +24,15 @@ def pedir_texto(mensaje, obligatorio=False):
 
 
 def pedir_opcion(mensaje, opciones):
+    """Pide al usuario que elija un valor de una lista.
+
+    Args:
+        mensaje: Texto que se muestra al pedir el dato.
+        opciones: Lista de valores válidos.
+
+    Returns:
+        El valor elegido, en minúsculas.
+    """
     while True:
         valor = input(f"{mensaje} ({'/'.join(opciones)}): ").strip().lower()
         if valor in opciones:
@@ -22,6 +42,11 @@ def pedir_opcion(mensaje, opciones):
 
 
 def pedir_categoria():
+    """Muestra las categorías numeradas y pide elegir una.
+
+    Returns:
+        El nombre de la categoría elegida.
+    """
     for numero, categoria in enumerate(gestor.CATEGORIAS, start=1):
         print(f"  {numero}. {categoria}")
     while True:
@@ -36,6 +61,11 @@ def pedir_categoria():
 
 
 def pedir_id():
+    """Pide el ID de un ticket y lo convierte a entero.
+
+    Returns:
+        El ID como entero, o None si no es un número válido.
+    """
     try:
         return int(input("ID del ticket: "))
     except ValueError:
@@ -44,6 +74,11 @@ def pedir_id():
 
 
 def opcion_crear(lista):
+    """Pide los datos de un ticket nuevo y lo agrega a la lista.
+
+    Args:
+        lista: Lista de tickets.
+    """
     titulo = pedir_texto("Título: ", obligatorio=True)
     descripcion = pedir_texto("Descripción: ")
     prioridad = pedir_opcion("Prioridad", gestor.PRIORIDADES)
@@ -60,10 +95,20 @@ def opcion_crear(lista):
 
 
 def opcion_listar(lista):
+    """Muestra todos los tickets en una tabla.
+
+    Args:
+        lista: Lista de tickets.
+    """
     vista.mostrar_tabla(lista)
 
 
 def opcion_buscar(lista):
+    """Pide un ID y muestra todos los datos de ese ticket.
+
+    Args:
+        lista: Lista de tickets.
+    """
     id_ticket = pedir_id()
     if id_ticket is None:
         return
@@ -75,6 +120,11 @@ def opcion_buscar(lista):
 
 
 def opcion_cambiar_estado(lista):
+    """Pide un ID y avanza el ticket al siguiente estado.
+
+    Args:
+        lista: Lista de tickets.
+    """
     id_ticket = pedir_id()
     if id_ticket is None:
         return
@@ -88,6 +138,11 @@ def opcion_cambiar_estado(lista):
 
 
 def opcion_eliminar(lista):
+    """Pide un ID y elimina el ticket previa confirmación.
+
+    Args:
+        lista: Lista de tickets.
+    """
     id_ticket = pedir_id()
     if id_ticket is None:
         return
@@ -107,6 +162,11 @@ def opcion_eliminar(lista):
 
 
 def opcion_filtrar(lista):
+    """Muestra los tickets de una prioridad, estado o categoría.
+
+    Args:
+        lista: Lista de tickets.
+    """
     campo = pedir_opcion("Filtrar por", ["prioridad", "estado", "categoria"])
     if campo == "categoria":
         valor = pedir_categoria()
@@ -120,10 +180,20 @@ def opcion_filtrar(lista):
 
 
 def opcion_ordenar(lista):
+    """Muestra los tickets ordenados de prioridad alta a baja.
+
+    Args:
+        lista: Lista de tickets.
+    """
     vista.mostrar_tabla(gestor.ordenar_por_prioridad(lista))
 
 
 def opcion_asignar_tecnico(lista):
+    """Pide un ID y el nombre del técnico a asignar.
+
+    Args:
+        lista: Lista de tickets.
+    """
     id_ticket = pedir_id()
     if id_ticket is None:
         return
@@ -138,6 +208,11 @@ def opcion_asignar_tecnico(lista):
 
 
 def opcion_editar(lista):
+    """Permite modificar título, descripción o prioridad.
+
+    Args:
+        lista: Lista de tickets.
+    """
     id_ticket = pedir_id()
     if id_ticket is None:
         return
@@ -164,11 +239,21 @@ def opcion_editar(lista):
 
 
 def opcion_buscar_palabra(lista):
+    """Muestra los tickets que contienen una palabra.
+
+    Args:
+        lista: Lista de tickets.
+    """
     palabra = pedir_texto("Palabra a buscar: ", obligatorio=True)
     vista.mostrar_tabla(gestor.buscar_por_palabra(lista, palabra))
 
 
 def opcion_vencidos(lista):
+    """Muestra los tickets con el SLA vencido.
+
+    Args:
+        lista: Lista de tickets.
+    """
     vencidos = gestor.tickets_vencidos(lista)
     if not vencidos:
         vista.mensaje_ok("No hay tickets con SLA vencido.")
@@ -178,10 +263,20 @@ def opcion_vencidos(lista):
 
 
 def opcion_resumen(lista):
+    """Muestra la cantidad de tickets por estado y prioridad.
+
+    Args:
+        lista: Lista de tickets.
+    """
     vista.mostrar_resumen(reportes.generar_resumen(lista))
 
 
 def opcion_exportar(lista):
+    """Exporta todos los tickets a un archivo CSV.
+
+    Args:
+        lista: Lista de tickets.
+    """
     if not lista:
         vista.mensaje_info("No hay tickets para exportar.")
         return
@@ -211,6 +306,7 @@ OPCIONES = [
 
 
 def mostrar_menu():
+    """Muestra las opciones del menú principal."""
     vista.mostrar_titulo("Mesa de Ayuda")
     for numero, (texto, _) in enumerate(OPCIONES, start=1):
         print(f"{numero}. {texto}")
@@ -218,6 +314,14 @@ def mostrar_menu():
 
 
 def elegir_accion(opcion):
+    """Devuelve la función asociada a la opción elegida.
+
+    Args:
+        opcion: Texto ingresado por el usuario.
+
+    Returns:
+        La función de la opción, o None si la opción no es válida.
+    """
     try:
         numero = int(opcion)
     except ValueError:
@@ -228,6 +332,7 @@ def elegir_accion(opcion):
 
 
 def main():
+    """Carga los tickets y repite el menú hasta elegir Salir."""
     lista = archivo.cargar_tickets()
     while True:
         mostrar_menu()

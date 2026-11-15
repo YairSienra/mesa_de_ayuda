@@ -1,9 +1,19 @@
+"""Configuración del registro de eventos en helpdesk.log."""
+
 import logging
 
 ARCHIVO_LOG = "helpdesk.log"
 
 
 def configurar_logs(ruta=ARCHIVO_LOG):
+    """Configura el logger que escribe en el archivo de logs.
+
+    Args:
+        ruta: Ruta del archivo de logs.
+
+    Returns:
+        El logger configurado.
+    """
     logger = logging.getLogger("helpdesk")
     if logger.handlers:
         return logger
