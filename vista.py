@@ -38,6 +38,7 @@ def mostrar_tabla(tickets):
     tabla.add_column("Título")
     tabla.add_column("Prioridad")
     tabla.add_column("Estado")
+    tabla.add_column("Categoría")
     tabla.add_column("Técnico")
     tabla.add_column("Creado")
     for ticket in tickets:
@@ -46,6 +47,7 @@ def mostrar_tabla(tickets):
             ticket["titulo"],
             colorear_prioridad(ticket["prioridad"]),
             ticket["estado"],
+            ticket.get("categoria", "-"),
             ticket.get("tecnico", "sin asignar"),
             ticket["fecha_creacion"],
         )

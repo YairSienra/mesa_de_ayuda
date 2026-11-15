@@ -19,6 +19,20 @@ def pedir_opcion(mensaje, opciones):
         vista.mensaje_error(f"Opción inválida. Elegí entre: {', '.join(opciones)}.")
 
 
+def pedir_categoria():
+    for numero, categoria in enumerate(gestor.CATEGORIAS, start=1):
+        print(f"  {numero}. {categoria}")
+    while True:
+        try:
+            numero = int(input("Categoría (número): "))
+        except ValueError:
+            vista.mensaje_error("Ingresá un número.")
+            continue
+        if 1 <= numero <= len(gestor.CATEGORIAS):
+            return gestor.CATEGORIAS[numero - 1]
+        vista.mensaje_error("Número fuera de rango.")
+
+
 def pedir_id():
     try:
         return int(input("ID del ticket: "))
@@ -31,8 +45,11 @@ def opcion_crear(lista):
     titulo = pedir_texto("Título: ", obligatorio=True)
     descripcion = pedir_texto("Descripción: ")
     prioridad = pedir_opcion("Prioridad", gestor.PRIORIDADES)
+    categoria = pedir_categoria()
     try:
-        ticket = gestor.crear_ticket(lista, titulo, descripcion, prioridad)
+        ticket = gestor.crear_ticket(
+            lista, titulo, descripcion, prioridad, categoria
+        )
     except ValueError as error:
         vista.mensaje_error(str(error))
         return
@@ -88,9 +105,12 @@ def opcion_eliminar(lista):
 
 
 def opcion_filtrar(lista):
-    campo = pedir_opcion("Filtrar por", ["prioridad", "estado"])
-    valores = gestor.PRIORIDADES if campo == "prioridad" else gestor.ESTADOS
-    valor = pedir_opcion(campo.capitalize(), valores)
+    campo = pedir_opcion("Filtrar por", ["prioridad", "estado", "categoria"])
+    if campo == "categoria":
+        valor = pedir_categoria()
+    else:
+        valores = gestor.PRIORIDADES if campo == "prioridad" else gestor.ESTADOS
+        valor = pedir_opcion(campo.capitalize(), valores)
     vista.mostrar_tabla(gestor.filtrar_tickets(lista, campo, valor))
 
 
@@ -118,7 +138,7 @@ OPCIONES = [
     ("Buscar ticket por ID", opcion_buscar),
     ("Cambiar estado", opcion_cambiar_estado),
     ("Eliminar ticket", opcion_eliminar),
-    ("Filtrar por prioridad o estado", opcion_filtrar),
+    ("Filtrar por prioridad, estado o categoría", opcion_filtrar),
     ("Listar ordenados por prioridad", opcion_ordenar),
     ("Asignar técnico", opcion_asignar_tecnico),
 ]
