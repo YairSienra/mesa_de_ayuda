@@ -97,6 +97,16 @@ def filtrar_tickets(tickets, campo, valor):
     return [ticket for ticket in tickets if ticket.get(campo) == valor]
 
 
+def buscar_por_palabra(tickets, palabra):
+    palabra = palabra.strip().lower()
+    return [
+        ticket
+        for ticket in tickets
+        if palabra in ticket["titulo"].lower()
+        or palabra in ticket["descripcion"].lower()
+    ]
+
+
 def ordenar_por_prioridad(tickets):
     return sorted(tickets, key=lambda ticket: PRIORIDADES.index(ticket["prioridad"]))
 

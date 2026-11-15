@@ -159,6 +159,11 @@ def opcion_editar(lista):
     vista.mensaje_ok(f"Ticket #{id_ticket} actualizado.")
 
 
+def opcion_buscar_palabra(lista):
+    palabra = pedir_texto("Palabra a buscar: ", obligatorio=True)
+    vista.mostrar_tabla(gestor.buscar_por_palabra(lista, palabra))
+
+
 def opcion_resumen(lista):
     vista.mostrar_resumen(reportes.generar_resumen(lista))
 
@@ -174,6 +179,7 @@ OPCIONES = [
     ("Asignar técnico", opcion_asignar_tecnico),
     ("Ver resumen", opcion_resumen),
     ("Editar ticket", opcion_editar),
+    ("Buscar por palabra", opcion_buscar_palabra),
 ]
 
 
