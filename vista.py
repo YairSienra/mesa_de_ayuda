@@ -54,6 +54,21 @@ def mostrar_tabla(tickets):
     consola.print(tabla)
 
 
+def mostrar_conteo(titulo, conteo):
+    tabla = Table(title=titulo)
+    tabla.add_column(titulo.split()[-1].capitalize())
+    tabla.add_column("Cantidad", justify="right")
+    for clave, cantidad in conteo.items():
+        tabla.add_row(clave, str(cantidad))
+    consola.print(tabla)
+
+
+def mostrar_resumen(resumen):
+    mostrar_titulo(f"Resumen: {resumen['total']} tickets")
+    mostrar_conteo("Tickets por estado", resumen["por_estado"])
+    mostrar_conteo("Tickets por prioridad", resumen["por_prioridad"])
+
+
 def mostrar_detalle(ticket):
     tabla = Table(title=f"Ticket #{ticket['id']}", show_header=False)
     tabla.add_column("Campo", style="bold")

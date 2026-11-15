@@ -1,4 +1,5 @@
 import archivo
+import reportes
 import tickets as gestor
 import vista
 
@@ -132,6 +133,10 @@ def opcion_asignar_tecnico(lista):
     vista.mensaje_ok(f"Ticket #{id_ticket} asignado a {tecnico}.")
 
 
+def opcion_resumen(lista):
+    vista.mostrar_resumen(reportes.generar_resumen(lista))
+
+
 OPCIONES = [
     ("Crear ticket", opcion_crear),
     ("Listar tickets", opcion_listar),
@@ -141,6 +146,7 @@ OPCIONES = [
     ("Filtrar por prioridad, estado o categoría", opcion_filtrar),
     ("Listar ordenados por prioridad", opcion_ordenar),
     ("Asignar técnico", opcion_asignar_tecnico),
+    ("Ver resumen", opcion_resumen),
 ]
 
 
