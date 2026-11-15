@@ -94,6 +94,10 @@ def opcion_filtrar(lista):
     vista.mostrar_tabla(gestor.filtrar_tickets(lista, campo, valor))
 
 
+def opcion_ordenar(lista):
+    vista.mostrar_tabla(gestor.ordenar_por_prioridad(lista))
+
+
 OPCIONES = [
     ("Crear ticket", opcion_crear),
     ("Listar tickets", opcion_listar),
@@ -101,6 +105,7 @@ OPCIONES = [
     ("Cambiar estado", opcion_cambiar_estado),
     ("Eliminar ticket", opcion_eliminar),
     ("Filtrar por prioridad o estado", opcion_filtrar),
+    ("Listar ordenados por prioridad", opcion_ordenar),
 ]
 
 
