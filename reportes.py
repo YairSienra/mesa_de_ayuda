@@ -46,11 +46,14 @@ def fila_reporte(ticket):
 def exportar_csv(tickets, ruta=ARCHIVO_REPORTE):
     try:
         with open(ruta, "w", newline="", encoding="utf-8-sig") as archivo:
-            escritor = csv.DictWriter(archivo, fieldnames=COLUMNAS, delimiter=";")
+            escritor = csv.DictWriter(
+                archivo, fieldnames=COLUMNAS, delimiter=";"
+            )
             escritor.writeheader()
             for ticket in tickets:
                 escritor.writerow(fila_reporte(ticket))
     except OSError as error:
-        raise OSError(f"No se pudo crear el reporte {ruta}: {error}") from error
+        mensaje = f"No se pudo crear el reporte {ruta}: {error}"
+        raise OSError(mensaje) from error
     log.info(f"Reporte exportado a {ruta} ({len(tickets)} tickets)")
     return ruta

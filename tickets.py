@@ -25,7 +25,8 @@ def crear_ticket(tickets, titulo, descripcion, prioridad, categoria):
     if prioridad not in PRIORIDADES:
         raise ValueError("La prioridad debe ser alta, media o baja.")
     if categoria not in CATEGORIAS:
-        raise ValueError(f"La categoría debe ser una de: {', '.join(CATEGORIAS)}.")
+        validas = ", ".join(CATEGORIAS)
+        raise ValueError(f"La categoría debe ser una de: {validas}.")
     ticket = {
         "id": generar_id(tickets),
         "titulo": titulo,
@@ -130,7 +131,9 @@ def buscar_por_palabra(tickets, palabra):
 
 
 def ordenar_por_prioridad(tickets):
-    return sorted(tickets, key=lambda ticket: PRIORIDADES.index(ticket["prioridad"]))
+    return sorted(
+        tickets, key=lambda ticket: PRIORIDADES.index(ticket["prioridad"])
+    )
 
 
 def eliminar_ticket(tickets, id_ticket):

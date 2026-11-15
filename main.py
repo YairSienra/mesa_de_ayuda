@@ -17,7 +17,8 @@ def pedir_opcion(mensaje, opciones):
         valor = input(f"{mensaje} ({'/'.join(opciones)}): ").strip().lower()
         if valor in opciones:
             return valor
-        vista.mensaje_error(f"Opción inválida. Elegí entre: {', '.join(opciones)}.")
+        validas = ", ".join(opciones)
+        vista.mensaje_error(f"Opción inválida. Elegí entre: {validas}.")
 
 
 def pedir_categoria():
@@ -110,7 +111,10 @@ def opcion_filtrar(lista):
     if campo == "categoria":
         valor = pedir_categoria()
     else:
-        valores = gestor.PRIORIDADES if campo == "prioridad" else gestor.ESTADOS
+        if campo == "prioridad":
+            valores = gestor.PRIORIDADES
+        else:
+            valores = gestor.ESTADOS
         valor = pedir_opcion(campo.capitalize(), valores)
     vista.mostrar_tabla(gestor.filtrar_tickets(lista, campo, valor))
 
