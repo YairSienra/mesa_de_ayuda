@@ -6,6 +6,7 @@ PRIORIDADES = ["alta", "media", "baja"]
 ESTADOS = ["abierto", "en_curso", "resuelto"]
 SIGUIENTE_ESTADO = {"abierto": "en_curso", "en_curso": "resuelto"}
 FORMATO_FECHA = "%Y-%m-%d %H:%M"
+SIN_TECNICO = "sin asignar"
 
 
 def generar_id(tickets):
@@ -28,6 +29,7 @@ def crear_ticket(tickets, titulo, descripcion, prioridad):
         "prioridad": prioridad,
         "estado": "abierto",
         "fecha_creacion": datetime.now().strftime(FORMATO_FECHA),
+        "tecnico": SIN_TECNICO,
     }
     tickets.append(ticket)
     log.info(f"Ticket #{ticket['id']} creado (prioridad {prioridad})")
@@ -50,6 +52,18 @@ def cambiar_estado(tickets, id_ticket):
         raise ValueError(f"El ticket #{id_ticket} ya está resuelto.")
     ticket["estado"] = SIGUIENTE_ESTADO[estado_actual]
     log.info(f"Ticket #{id_ticket} cambió a {ticket['estado']}")
+    return ticket
+
+
+def asignar_tecnico(tickets, id_ticket, tecnico):
+    tecnico = tecnico.strip()
+    if not tecnico:
+        raise ValueError("El nombre del técnico no puede estar vacío.")
+    ticket = buscar_ticket(tickets, id_ticket)
+    if ticket is None:
+        raise LookupError(f"No existe el ticket #{id_ticket}.")
+    ticket["tecnico"] = tecnico
+    log.info(f"Ticket #{id_ticket} asignado a {tecnico}")
     return ticket
 
 

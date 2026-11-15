@@ -98,6 +98,20 @@ def opcion_ordenar(lista):
     vista.mostrar_tabla(gestor.ordenar_por_prioridad(lista))
 
 
+def opcion_asignar_tecnico(lista):
+    id_ticket = pedir_id()
+    if id_ticket is None:
+        return
+    tecnico = pedir_texto("Nombre del técnico: ", obligatorio=True)
+    try:
+        gestor.asignar_tecnico(lista, id_ticket, tecnico)
+    except (LookupError, ValueError) as error:
+        vista.mensaje_error(str(error))
+        return
+    archivo.guardar_tickets(lista)
+    vista.mensaje_ok(f"Ticket #{id_ticket} asignado a {tecnico}.")
+
+
 OPCIONES = [
     ("Crear ticket", opcion_crear),
     ("Listar tickets", opcion_listar),
@@ -106,6 +120,7 @@ OPCIONES = [
     ("Eliminar ticket", opcion_eliminar),
     ("Filtrar por prioridad o estado", opcion_filtrar),
     ("Listar ordenados por prioridad", opcion_ordenar),
+    ("Asignar técnico", opcion_asignar_tecnico),
 ]
 
 
