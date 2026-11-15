@@ -93,6 +93,16 @@ def editar_ticket(tickets, id_ticket, titulo="", descripcion="", prioridad=""):
     return cambios
 
 
+def horas_abierto(ticket, ahora=None):
+    if ahora is None:
+        ahora = datetime.now()
+    try:
+        creado = datetime.strptime(ticket["fecha_creacion"], FORMATO_FECHA)
+    except (KeyError, ValueError):
+        return None
+    return int((ahora - creado).total_seconds() // 3600)
+
+
 def filtrar_tickets(tickets, campo, valor):
     return [ticket for ticket in tickets if ticket.get(campo) == valor]
 

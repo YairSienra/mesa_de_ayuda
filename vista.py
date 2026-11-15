@@ -2,6 +2,8 @@ from colorama import Fore, Style, init
 from rich.console import Console
 from rich.table import Table
 
+from tickets import horas_abierto
+
 init(autoreset=True)
 consola = Console()
 
@@ -29,6 +31,15 @@ def mostrar_titulo(texto):
     print(Style.BRIGHT + Fore.CYAN + f"\n=== {texto} ===")
 
 
+def formatear_tiempo(ticket):
+    if ticket["estado"] == "resuelto":
+        return "-"
+    horas = horas_abierto(ticket)
+    if horas is None:
+        return "?"
+    return f"{horas} h"
+
+
 def mostrar_tabla(tickets):
     if not tickets:
         mensaje_info("No hay tickets para mostrar.")
@@ -41,6 +52,7 @@ def mostrar_tabla(tickets):
     tabla.add_column("Categoría")
     tabla.add_column("Técnico")
     tabla.add_column("Creado")
+    tabla.add_column("Abierto hace", justify="right")
     for ticket in tickets:
         tabla.add_row(
             str(ticket["id"]),
@@ -50,6 +62,7 @@ def mostrar_tabla(tickets):
             ticket.get("categoria", "-"),
             ticket.get("tecnico", "sin asignar"),
             ticket["fecha_creacion"],
+            formatear_tiempo(ticket),
         )
     consola.print(tabla)
 
