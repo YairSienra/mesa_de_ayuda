@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+tickets.json
+helpdesk.log
+reporte_tickets.csv
