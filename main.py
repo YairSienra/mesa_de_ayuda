@@ -2,6 +2,7 @@ import archivo
 import tickets as gestor
 import vista
 
+
 def pedir_texto(mensaje, obligatorio=False):
     while True:
         texto = input(mensaje).strip()
@@ -86,12 +87,20 @@ def opcion_eliminar(lista):
     vista.mensaje_ok(f"Ticket #{id_ticket} eliminado.")
 
 
+def opcion_filtrar(lista):
+    campo = pedir_opcion("Filtrar por", ["prioridad", "estado"])
+    valores = gestor.PRIORIDADES if campo == "prioridad" else gestor.ESTADOS
+    valor = pedir_opcion(campo.capitalize(), valores)
+    vista.mostrar_tabla(gestor.filtrar_tickets(lista, campo, valor))
+
+
 OPCIONES = [
     ("Crear ticket", opcion_crear),
     ("Listar tickets", opcion_listar),
     ("Buscar ticket por ID", opcion_buscar),
     ("Cambiar estado", opcion_cambiar_estado),
     ("Eliminar ticket", opcion_eliminar),
+    ("Filtrar por prioridad o estado", opcion_filtrar),
 ]
 
 

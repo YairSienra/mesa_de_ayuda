@@ -53,6 +53,10 @@ def cambiar_estado(tickets, id_ticket):
     return ticket
 
 
+def filtrar_tickets(tickets, campo, valor):
+    return [ticket for ticket in tickets if ticket.get(campo) == valor]
+
+
 def eliminar_ticket(tickets, id_ticket):
     ticket = buscar_ticket(tickets, id_ticket)
     if ticket is None:
