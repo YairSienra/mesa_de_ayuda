@@ -177,6 +177,18 @@ def opcion_resumen(lista):
     vista.mostrar_resumen(reportes.generar_resumen(lista))
 
 
+def opcion_exportar(lista):
+    if not lista:
+        vista.mensaje_info("No hay tickets para exportar.")
+        return
+    try:
+        ruta = reportes.exportar_csv(lista)
+    except OSError as error:
+        vista.mensaje_error(str(error))
+        return
+    vista.mensaje_ok(f"Reporte generado en {ruta}.")
+
+
 OPCIONES = [
     ("Crear ticket", opcion_crear),
     ("Listar tickets", opcion_listar),
@@ -190,6 +202,7 @@ OPCIONES = [
     ("Editar ticket", opcion_editar),
     ("Buscar por palabra", opcion_buscar_palabra),
     ("Ver tickets con SLA vencido", opcion_vencidos),
+    ("Exportar reporte CSV", opcion_exportar),
 ]
 
 
