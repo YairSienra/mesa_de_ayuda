@@ -71,6 +71,28 @@ def asignar_tecnico(tickets, id_ticket, tecnico):
     return ticket
 
 
+def editar_ticket(tickets, id_ticket, titulo="", descripcion="", prioridad=""):
+    ticket = buscar_ticket(tickets, id_ticket)
+    if ticket is None:
+        raise LookupError(f"No existe el ticket #{id_ticket}.")
+    prioridad = prioridad.strip().lower()
+    if prioridad and prioridad not in PRIORIDADES:
+        raise ValueError("La prioridad debe ser alta, media o baja.")
+    cambios = []
+    if titulo.strip():
+        ticket["titulo"] = titulo.strip()
+        cambios.append("titulo")
+    if descripcion.strip():
+        ticket["descripcion"] = descripcion.strip()
+        cambios.append("descripcion")
+    if prioridad:
+        ticket["prioridad"] = prioridad
+        cambios.append("prioridad")
+    if cambios:
+        log.info(f"Ticket #{id_ticket} editado ({', '.join(cambios)})")
+    return cambios
+
+
 def filtrar_tickets(tickets, campo, valor):
     return [ticket for ticket in tickets if ticket.get(campo) == valor]
 

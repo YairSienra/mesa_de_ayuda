@@ -133,6 +133,32 @@ def opcion_asignar_tecnico(lista):
     vista.mensaje_ok(f"Ticket #{id_ticket} asignado a {tecnico}.")
 
 
+def opcion_editar(lista):
+    id_ticket = pedir_id()
+    if id_ticket is None:
+        return
+    ticket = gestor.buscar_ticket(lista, id_ticket)
+    if ticket is None:
+        vista.mensaje_error(f"No existe el ticket #{id_ticket}.")
+        return
+    vista.mensaje_info("Dejá vacío el campo que no quieras cambiar.")
+    titulo = pedir_texto(f"Título [{ticket['titulo']}]: ")
+    descripcion = pedir_texto(f"Descripción [{ticket['descripcion']}]: ")
+    prioridad = pedir_texto(f"Prioridad [{ticket['prioridad']}]: ")
+    try:
+        cambios = gestor.editar_ticket(
+            lista, id_ticket, titulo, descripcion, prioridad
+        )
+    except (LookupError, ValueError) as error:
+        vista.mensaje_error(str(error))
+        return
+    if not cambios:
+        vista.mensaje_info("No se realizaron cambios.")
+        return
+    archivo.guardar_tickets(lista)
+    vista.mensaje_ok(f"Ticket #{id_ticket} actualizado.")
+
+
 def opcion_resumen(lista):
     vista.mostrar_resumen(reportes.generar_resumen(lista))
 
@@ -147,6 +173,7 @@ OPCIONES = [
     ("Listar ordenados por prioridad", opcion_ordenar),
     ("Asignar técnico", opcion_asignar_tecnico),
     ("Ver resumen", opcion_resumen),
+    ("Editar ticket", opcion_editar),
 ]
 
 
